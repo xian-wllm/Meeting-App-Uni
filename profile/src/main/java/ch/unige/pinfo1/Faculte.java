@@ -1,0 +1,5 @@
+package ch.unige.pinfo1;
+
+public enum Faculte {
+    SCIENCES, MEDECINE, LETTERS, SOCIETY, ECONOMY, LAW, THEOLOGY, PSYCHOLOGY, TRADUCTION, INSTITUTES
+}

@@ -1,0 +1,16 @@
+
+deploy-prod:
+  stage: deploy
+  image: alpine/helm:latest
+  script:
+    - helm repo add bitnami https://charts.bitnami.com/bitnami
+    - helm dependency build ./pinfo1/spark
+    - helm upgrade
+      --install spark ./pinfo1/spark
+      --namespace production
+      --create-namespace
+      --set oidc.authserverurl=$OIDC_AUTH_SERVER_URL
+      --set oidc.secret=$OIDC_SECRET
+      --set oidc.clientid=$OIDC_CLIENT_ID
+      
+  environment: production

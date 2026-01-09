@@ -1,0 +1,612 @@
+openapi: 3.0.3
+info:
+  title: Spark
+  description: |-
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+  termsOfService: ///
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+tags:
+  - name: user
+    description: Operations about user
+  - name: profile
+    description: Operations about user profile
+  - name: associations
+    description: Operations of / on the associations 
+  - name: calendar
+    description: Operations about the calendar
+  - name: events
+    description: Operations about the events
+  - name: messagerie
+    description: Access to messages
+  - name: match
+    description: Search and get matches
+
+
+paths:
+  /user:
+    post:
+      tags:
+        - user
+      summary: Create user
+      description: Prolly when 1st login
+      operationId: createUser
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Invalid student number supplied
+  /user/createFromIsis:
+    post:
+      tags:
+        - user
+      summary: Create user from file
+      description: Prolly if we use isis and they give back some sort of file
+      operationId: createUsersIsis
+      responses:
+        '200':
+          description: successful operation
+        '409':
+          description: Account already existing
+  /user/{username}:
+    get:
+      tags:
+        - user
+      summary: Get user by user name
+      description: Get user by user name
+      operationId: getUserByName
+      parameters:
+        - name: username
+          in: path
+          description: not the ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Invalid username supplied
+        '404':
+          description: User not found
+    put:
+      tags:
+        - user
+      summary: Update user
+      description: Update user
+      operationId: updateUser
+      parameters:
+        - name: username
+          in: path
+          description: name that need to be deleted
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Invalid Username supplied
+        '404':
+          description: User not found
+    delete:
+      tags:
+        - user
+      summary: Delete user
+      description: Delete user
+      operationId: deleteUser
+      parameters:
+        - name: username
+          in: path
+          description: The name that needs to be deleted
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Invalid Username supplied
+        '404':
+          description: User not found
+          
+  /user/{userID}:
+    get:
+      tags:
+        - user
+      summary: Get user by ID
+      description: Backdoor if they try some shit with weird characters
+      operationId: getUserByID
+      parameters:
+        - name: userID
+          in: path
+          description: ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: User not found
+    put:
+      tags:
+        - user
+      summary: Update user from ID
+      description: Update user from ID
+      operationId: updateUserID
+      parameters:
+        - name: userID
+          in: path
+          description: ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: User not found
+    delete:
+      tags:
+        - user
+      summary: Delete user
+      description: Account too old / ban, info coming from the uni if too old, so they give us the id
+      operationId: deleteuserID
+      parameters:
+        - name: userID
+          in: path
+          description: ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: User not found
+          
+  /profile/{userID}:
+    post:
+      tags:
+        - profile
+      summary: intialise profile
+      description: Initialise profile, instead stays a "lurker" unable to match or be matched
+      operationId: createProfile
+      parameters:
+        - name: userID
+          in: path
+          description: ID 
+          required: true
+          schema:
+            type: integer
+            format: ID
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Invalid input          
+    put:
+      tags:
+        - profile
+      summary: edit profile
+      description: edit the profile to modify it
+      operationId: editProfile
+      parameters:
+        - name: userID
+          in: path
+          description: ID
+          required: true
+          schema:
+            type: integer
+            format: ID
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Invalid input  
+    get:
+      tags:
+        - profile
+      summary: get profile
+      description: get a the profile
+      operationId: getProfile
+      parameters:
+        - name: userID
+          in: path
+          description: ID
+          required: true
+          schema:
+            type: integer
+            format: ID
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Invalid input  
+  /profile/{username}:
+    get:
+      tags:
+        - profile
+      summary: get profile for username
+      description: get a the profile
+      operationId: getProfileUsername
+      parameters:
+        - name: username
+          in: path
+          description: ID
+          required: true
+          schema:
+            type: string
+            format: username
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Invalid input  
+          
+  /associations:
+    post:
+      tags:
+        - associations
+      summary: Create association
+      description: Prolly when 1st login
+      operationId: createAsso
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Invalid input       
+          
+  /associations/{assoID}:
+    put:
+      tags:
+        - associations
+      summary: edit profile
+      description: edit the profile to modify it
+      operationId: editAssoProfile
+      parameters:
+        - name: assoID
+          in: path
+          description: ID
+          required: true
+          schema:
+            type: integer
+            format: ID
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Invalid input  
+    get:
+      tags:
+        - associations
+      summary: get asso profile
+      description: get the profile
+      operationId: getAssoProfile
+      parameters:
+        - name: assoID
+          in: path
+          description: ID
+          required: true
+          schema:
+            type: integer
+            format: ID
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Invalid input           
+   
+   
+  /calendar:
+    post:
+      tags:
+        - calendar
+      summary: Add a new event to the calendar
+      description: Add a new event to the calendar
+      operationId: addEvent
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid input
+  /calendar/event:
+    put:
+      tags:
+        - calendar
+      summary: Update an existing event
+      description: Update an existing event by Id
+      operationId: updateDate
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Event not found
+
+  /calendar/event/findByTags:
+    get:
+      tags:
+        - calendar
+      summary: Finds Events by tags
+      description: Using tags as "association event", "enterprise event", "personal event"
+      operationId: findEventsByTags
+      parameters:
+        - name: tags
+          in: query
+          description: Using "association event", "enterprise event", "personal event"
+          required: false
+          explode: true
+          schema:
+            type: array
+            items: 
+              type: string
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Invalid tag value
+  /calendar/{eventID}:
+    get:
+      tags:
+        - calendar
+      summary: Find event by ID
+      description: Returns a single event
+      operationId: getEventById
+      parameters:
+        - name: eventID
+          in: path
+          description: ID of event to return
+          required: true
+          schema:
+            type: integer
+            format: eventID
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Event not found
+    delete:
+      tags:
+        - calendar
+      summary: Deletes an event from the calendar
+      description: delete an event from the calendar
+      operationId: deleteEEvent
+      parameters:
+        - name: eventID
+          in: path
+          description: Event id to delete
+          required: true
+          schema:
+            type: integer
+            format: eventID
+      responses:
+        '400':
+          description: Invalid input
+  
+  
+  /events:
+    post:
+      tags:
+        - events
+      summary: Post a new event
+      description: Post a new event
+      operationId: postEvent
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Invalid input
+  /events/findByTags:
+    get:
+      tags:
+        - events
+      summary: Find event by tag
+      description: Find event by tag
+      operationId: findEventTag
+      responses:
+        '200':
+          description: successful operation
+  /events/findByAsso:
+    get:
+      tags:
+        - events
+      summary: Find event by association
+      description: Find event by association
+      operationId: findEventAsso
+      responses:
+        '200':
+          description: successful operation
+
+  /events/{EventID}:
+    get:
+      tags:
+        - events
+      summary: Returns event by ID
+      description: Returns event by ID
+      operationId: getEvent
+      parameters:
+        - name: EventID
+          in: path
+          description: Event id to get
+          required: true
+          schema:
+            type: integer
+            format: eventID
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Invalid input
+    put:
+      tags:
+        - events
+      summary: Edit event by ID
+      description: Edit event by ID
+      operationId: editEvent
+      parameters:
+        - name: EventID
+          in: path
+          description: Event id to modify
+          required: true
+          schema:
+            type: object
+            format: eventType
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Invalid input
+    delete:
+      tags:
+        - events
+      summary: Delete an event by ID
+      description: Delete an Event
+      operationId: deleteEvent
+      parameters:
+        - name: EventID
+          in: path
+          description: Event id to delete
+          required: true
+          schema:
+            type: integer
+            format: eventID
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Invalid input
+  
+  /messagerie/{username}:
+    get:
+      tags:
+        - messagerie
+      summary: Returns messages of contact
+      description: Returns a list of messages
+      operationId: getMessages
+      parameters:
+        - name: username
+          in: path
+          description: username of target
+          required: true
+          schema:
+            type: string
+            format: username
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Invalid input
+    post:
+      tags:
+        - messagerie
+      summary: Send a message 
+      description: Send a message to contact
+      operationId: sendMessages
+      parameters:
+        - name: username
+          in: path
+          description: username of target
+          required: true
+          schema:
+            type: string
+            format: username
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Invalid input
+          
+  /messagerie/{UserID}:
+    get:
+      tags:
+        - messagerie
+      summary: Returns messages of contact
+      description: Returns a list of messages
+      operationId: getMessagesID
+      parameters:
+        - name: UserID
+          in: path
+          description: Id of contact
+          required: true
+          schema:
+            type: integer
+            format: id
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Invalid input
+    post:
+      tags:
+        - messagerie
+      summary: Send a message 
+      description: Send a message to contact
+      operationId: sendMessagesID
+      parameters:
+        - name: UserID
+          in: path
+          description: UserID of target
+          required: true
+          schema:
+            type: integer
+            format: id
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Invalid input
+          
+          
+  /match:
+    get:
+      tags:
+        - match
+      summary: Returns list of potential matches
+      description: Returns a list of matches
+      operationId: getMatches
+      responses:
+        '200':
+          description: successful operation
+  /match/{username}:
+    post:
+      tags:
+        - match
+      summary: Accept or refuse match of user
+      description: Accept or refuse a proposed match
+      operationId: optionsMatch
+      parameters:
+        - name: username
+          in: path
+          description: Username of match
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                action:
+                  type: string
+                  enum: [accept, refuse]
+                  description: Action to take for the match
+      responses:
+        '200':
+          description: successful operation
+          
+          

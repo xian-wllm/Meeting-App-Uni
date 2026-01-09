@@ -1,0 +1,245 @@
+# Default values for test_backend.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+datasource: 
+  username: "pinfo1"
+  password: "pinfo1"
+  port: 5432
+  database: "spark"
+
+oidc:
+  authserverurl:
+  clientid:
+  secret:
+
+
+associations:
+  image:
+    repository: registry.gitlab.unige.ch/p-info-2024/p-info-1/associations
+    pullPolicy: Always
+    tag: "latest"
+  podAnnotations: {}
+  podLabels: {}
+  service:
+    type: ClusterIP
+    port: 8080
+    
+
+calendar:
+  image:
+    repository: registry.gitlab.unige.ch/p-info-2024/p-info-1/calendar
+    pullPolicy: Always
+    tag: "latest"
+  podAnnotations: {}
+  podLabels: {}
+  service:
+    type: ClusterIP
+    port: 8080
+  
+  
+
+login:
+  image:
+    repository: registry.gitlab.unige.ch/p-info-2024/p-info-1/login
+    pullPolicy: Always
+    tag: "latest"
+  podAnnotations: {}
+  podLabels: {}
+  service:
+    type: ClusterIP
+    port: 8080
+  
+
+matchs:
+  image:
+    repository: registry.gitlab.unige.ch/p-info-2024/p-info-1/match
+    pullPolicy: Always
+    tag: "latest"
+  podAnnotations: {}
+  podLabels: {}
+  service:
+    type: ClusterIP
+    port: 8080
+  
+
+events:
+  image:
+    repository: registry.gitlab.unige.ch/p-info-2024/p-info-1/events
+    pullPolicy: Always
+    tag: "latest"
+  podAnnotations: {}
+  podLabels: {}
+  service:
+    type: ClusterIP
+    port: 8080
+  
+
+messagerie:
+  image:
+    repository: registry.gitlab.unige.ch/p-info-2024/p-info-1/messagerie
+    pullPolicy: Always
+    tag: "latest"
+  podAnnotations: {}
+  podLabels: {}
+  service:
+    type: ClusterIP
+    port: 8080
+  
+
+profile:
+  image:
+    repository: registry.gitlab.unige.ch/p-info-2024/p-info-1/profile
+    pullPolicy: Always
+    tag: "latest"
+  podAnnotations: {}
+  podLabels: {}
+  service:
+    type: ClusterIP
+    port: 8080
+  
+
+imagePullSecrets:
+ - name: mysecret
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Automatically mount a ServiceAccount's API credentials?
+  automount: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+
+
+ingress:
+  enabled: true
+  hostname: pinfo2.unige.ch
+  tls: true
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+    cert-manager.io/cluster-issuer: lets-encrypt
+  ingressClassName: public
+  paths:
+    - path: "/api/associations(?:/|$)(.*)"
+      type: Prefix
+      service: associations
+      port: 8080
+
+    - path: "/api/calendar(?:/|$)(.*)"
+      type: Prefix
+      service: calendar
+      port: 8080
+
+    - path: "/api/login(?:/|$)(.*)"
+      type: Prefix
+      service: login
+      port: 8080
+
+    - path: "/api/matchs(?:/|$)(.*)"
+      type: Prefix
+      service: matchs
+      port: 8080
+
+    - path: "/api/events(?:/|$)(.*)"
+      type: Prefix
+      service: events
+      port: 8080
+
+    - path: "/api/messagerie(?:/|$)(.*)"
+      type: Prefix
+      service: messagerie
+      port: 8080
+    
+    - path: "/api/profile(?:/|$)(.*)"
+      type: Prefix
+      service: profile
+      port: 8080
+
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+livenessProbe:
+  httpGet:
+    path: /
+    port: http
+readinessProbe:
+  httpGet:
+    path: /
+    port: http
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+# Additional volumes on the output Deployment definition.
+volumes: []
+# - name: foo
+#   secret:
+#     secretName: mysecret
+#     optional: false
+
+# Additional volumeMounts on the output Deployment definition.
+volumeMounts: []
+# - name: foo
+#   mountPath: "/etc/foo"
+#   readOnly: true
+
+affinity: {}
+
+postgresql:
+  global:
+    storageClass: "microk8s-hostpath"
+    postgresql:
+      auth:
+        username: "pinfo1"
+        password: "pinfo1"
+        database: "spark"
+  primary:
+    initdb:
+      script: {}       
+          
+kafka:
+  global:
+    storageClass: "microk8s-hostpath"
+  controller:
+    replicaCount: 2
+  persistence:
+    enabled: true
+    storageClass: "microk8s-hostpath"
+  service:
+      name: "kafka"
+      port: 9092
+
+
